@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Calculation</title>
+    <script>
+        function calculateResult() {
+            // Get input values
+            let basePrice = parseFloat(document.getElementById('basePrice').value);
+            let quality = parseFloat(document.getElementById('quality').value);
+            let qualityBonus = parseFloat(document.getElementById('qualityBonus').value) / 100;
+            let COGS = parseFloat(document.getElementById('COGS').value);
+            let searchCost = parseFloat(document.getElementById('searchCost').value);
+
+            // Perform the calculation
+            let result = (basePrice * (1 + (quality * qualityBonus))) - COGS - searchCost;
+
+            // Display the result
+            document.getElementById('result').textContent = 'Result: ' + result.toFixed(2);
+
+            // Update the URL with a fragment
+            let newUrl = window.location.href.split('#')[0] + "#result";
+            history.pushState({ path: newUrl }, '', newUrl);
+        }
+
+        function populateForm() {
+            const urlParams = new URLSearchParams(window.location.search);
+            document.getElementById('basePrice').value = urlParams.get('basePrice') || '';
+            document.getElementById('quality').value = urlParams.get('quality') || '';
+            document.getElementById('qualityBonus').value = urlParams.get('qualityBonus') || '';
+            document.getElementById('COGS').value = urlParams.get('COGS') || '';
+            document.getElementById('searchCost').value = urlParams.get('searchCost') || '';
+        }
+
+        window.onload = populateForm;
+    </script>
+</head>
+<body>
+    <h1>Sales Calculation</h1>
+    <form onsubmit="event.preventDefault(); calculateResult();">
+        <label for="basePrice">Base Price:</label>
+        <input type="number" id="basePrice" step="any" required><br><br>
+
+        <label for="quality">Quality:</label>
+        <input type="number" id="quality" step="any" required><br><br>
+
+        <label for="qualityBonus">Quality Bonus (%):</label>
+        <input type="number" id="qualityBonus" step="any" required><br><br>
+
+        <label for="COGS">COGS:</label>
+        <input type="number" id="COGS" step="any" required><br><br>
+
+        <label for="searchCost">Search Cost:</label>
+        <input type="number" id="searchCost" step="any" required><br><br>
+
+        <button type="submit">Calculate</button>
+    </form>
+    <h2 id="result">Result: </h2>
+</body>
+</html>
+
+
